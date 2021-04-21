@@ -1,10 +1,15 @@
-from golang as builder
-run mkdir /app
-copy ./app
-workdir /app
-run cgo_enabled=0 goos=linux goarch=amd64 go build -o server .
+FROM golang as builder
 
-from scratch
-copy --from=builder /app/server /
-expose 8080
-cmd ["/server"]
+RUN mkdir /app
+
+COPY . /app
+
+WORKDIR /app
+RUN CGO_ENABLED=0 goos=linux goarch=amd64 go build -o server .
+
+FROM scratch
+
+COPY --from=builder /app/server /
+
+EXPOSE 8080
+CMD ["/server"]
