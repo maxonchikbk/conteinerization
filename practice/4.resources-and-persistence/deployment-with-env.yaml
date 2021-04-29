@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: my-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: my-app
@@ -17,8 +17,8 @@ spec:
       - image: nginx:1.12
         name: nginx
         env:
-        - name: FOO
-          value: bar
+        - name: user
+          value: alex
         - name: TEST
           value: "1"
         ports:
