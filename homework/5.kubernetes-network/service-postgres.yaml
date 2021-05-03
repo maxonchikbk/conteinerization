@@ -8,5 +8,5 @@ spec:
   - port: 5432
     targetPort: 5432
   selector:
-    app: my-postgres
+    app: postgres5
   type: ClusterIP

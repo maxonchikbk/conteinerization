@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-postgres
+  name: postgres5
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: my-postgres
+      app: postgres5
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: my-postgres
+        app: postgres5
     spec:      
       containers:
       - image: postgres:10.13
-        name: postgres
+        name: postgres5
         ports:
         - containerPort: 5432
           protocol: TCP
@@ -27,14 +27,14 @@ spec:
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
+              name: secret5
               key: POSTGRES_PASSWORD
         - name: POSTGRES_DB 
           value: testdatabase
         - name: PGDATA
-          value: "/var/lib/postgresql/data/pgdata"
+          value: /var/lib/postgresql/data/pgdata
         volumeMounts:
-        - name: postgres-pvc
+        - name: pvc5
           mountPath: /var/lib/postgresql/data/
         resources:
           requests:
@@ -44,8 +44,6 @@ spec:
             cpu: 100m
             memory: 100Mi
       volumes:
-      - name: postgres-pvc
+      - name: pvc5
         persistentVolumeClaim:
-          claimName: postgres-pvc      
-
-       
+          claimName: pvc5
