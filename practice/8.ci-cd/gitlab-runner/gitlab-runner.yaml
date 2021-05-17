@@ -40,7 +40,7 @@ metadata:
     app: gitlab-runner
 type: Opaque
 stringData:
-  runner-registration-token: <CHANGE ME>
+  runner-registration-token: CzCB5zhF4UGVUMwVPUTc
   runner-token: ""
 ---
 apiVersion: v1
