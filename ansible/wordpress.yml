@@ -1,0 +1,11 @@
+---
+- hosts: prodgeek
+
+  vars_files: 
+    - ~/ansible/roles/wordpress/vars/main.yml 
+  roles:
+    - geerlingguy.nginx 
+    - geerlingguy.php
+    - geerlingguy.mysql
+    - wordpress
+

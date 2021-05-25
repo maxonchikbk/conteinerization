@@ -1,0 +1,15 @@
+all:
+  children:
+   geek:
+     hosts:
+       localhost:
+   prodgeek:
+     hosts:
+       192.168.1.40: # тут должен быть ваш сервер
+         ansible_user: max
+       192.168.1.41: # тут должен быть ваш сервер
+         ansible_user: max
+       192.168.1.42: # тут должен быть ваш сервер
+         ansible_user: max         
+       192.168.1.43: # тут должен быть ваш сервер
+         ansible_user: max
