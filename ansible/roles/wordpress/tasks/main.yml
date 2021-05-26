@@ -21,16 +21,6 @@
     recurse: yes
     owner: www-data
     group: www-data
-  when: ansible_os_family == 'Debian'
-  
-- name: Set ownership
-  file:
-    path: "/var/www/{{ server_name }}"
-    state: directory
-    recurse: yes
-    owner: nginx
-    group: nginx
-  when: ansible_os_family == 'RedHat'
   
 - name: Set permissions for directories
   shell: "/usr/bin/find /var/www/{{ server_name }}/wordpress/ -type d -exec chmod 750 {} \\;"

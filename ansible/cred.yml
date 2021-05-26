@@ -1,0 +1,4 @@
+---
+mysql_db: "wordpress" 
+mysql_user: "wordpress"
+mysql_password: "WordpreSS0!"
