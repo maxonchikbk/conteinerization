@@ -9,10 +9,10 @@ services:
   nginx:
     image: nginx:stable-alpine
     volumes:
-    #   - ./configs/nginx/nginx.conf:/etc/nginx/nginx.conf
+    #  - ./configs/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./configs/nginx/conf.d:/etc/nginx/conf.d
-    #   - ./configs/nginx/www:/var/www
-    #   - ./configs/nginx/other:/etc/nginx/other
+      - ./configs/nginx/www:/var/www
+      - ./configs/nginx/other:/etc/nginx/other
       - /var/log/nginx:/var/log/nginx
     restart: unless-stopped
     ports:
@@ -47,7 +47,7 @@ services:
     user: "472"
     volumes: 
       - grafana_data:/var/lib/grafana
-   #   - ./configs/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./configs/grafana/grafana.ini:/etc/grafana/grafana.ini
     environment: 
       GF_SECURITY_ADMIN_USER: "geek"
       GF_SECURITY_ADMIN_PASSWORD: "12345678"
@@ -55,7 +55,7 @@ services:
     restart: unless-stopped
 
   blackbox_exporter:
-    image: prom/blackbox-exporter:v0.19.0
+    image: prom/blackbox-exporter:latest
     volumes: 
       - ./configs/blackbox_exporter/config.yml:/etc/blackbox_exporter/config.yml
     restart: unless-stopped
@@ -75,7 +75,7 @@ services:
     pid: host
     restart: unless-stopped
     volumes: 
-      - '/:/host:ro'
+      - /:/host:ro
     logging:
       options:
         max-size: "100M"
