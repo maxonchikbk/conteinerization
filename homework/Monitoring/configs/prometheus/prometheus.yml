@@ -1,0 +1,62 @@
+# prometheus global config
+global:
+  scrape_interval:     10s    # как часто очищать цели
+  evaluation_interval: 5s    # смотрим, обновились ли правила
+  # scrape_timeout is set to the global default (10s).
+
+rule_files:                   # список файлов с правилами и алертами 
+  - "/etc/prometheus/targets/targets.rules"
+
+alerting:                     # настройки для связанного Alertmanager
+  alertmanagers:
+    - scheme: http
+      path_prefix: /alertmanager
+      static_configs:
+        - targets: ['alertmanager:9093']
+
+scrape_configs:               # список целей с конфигурацией
+  # metrics_path defaults to '/metrics'
+  # scheme defaults to 'http'.
+  - job_name: 'blackbox_exporter'
+    metrics_path: /probe
+    params:
+      module:
+        - http_2xx
+        - icmp
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    static_configs:
+      - targets: 
+        - https://ya.ru
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox_exporter:9115
+  - job_name: prometheus
+    scrape_interval: 5s
+    scrape_timeout: 2s
+    honor_labels: true
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  - job_name: node-exporter
+    scrape_interval: 5s
+    scrape_timeout: 2s
+    scheme: http
+    metrics_path: /metrics
+    honor_labels: true
+    static_configs:
+      - targets: 
+        - node-exporter:9100
+        labels:
+          envirenment: local
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: node-exporter:9100
