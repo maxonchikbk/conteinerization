@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+spec:
+  ports:
+  - name: epmd
+    port: 4369
+    protocol: TCP
+    targetPort: 4369
+  - name: cluster-links
+    port: 25672
+    protocol: TCP
+    targetPort: 25672
+  clusterIP: None
+  selector:
+    app: rabbitmq
+  sessionAffinity: None

@@ -53,3 +53,15 @@ spec:
         - containerPort: 5900
           protocol: TCP
           name: vnc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubedoom
+spec:
+  selector:
+    app: kubedoom
+  ports:
+  - name: vnc
+    protocol: TCP
+    port: 5900

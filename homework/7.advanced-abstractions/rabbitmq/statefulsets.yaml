@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+spec:
+  serviceName: rabbitmq
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      serviceAccountName: rabbitmq
+      terminationGracePeriodSeconds: 10
+      nodeSelector:
+        kubernetes.io/os: linux
+      initContainers:
+        - name: rabbitmq-config
+          image: busybox:latest
+          imagePullPolicy: Always
+          command:
+            - sh
+            - -euc
+            - |
+              cp /init/config/rabbitmq.conf /etc/rabbitmq/rabbitmq.conf
+              cp /init/config/enabled_plugins /etc/rabbitmq/enabled_plugins
+              cp /init/secrets/.erlang.cookie /var/lib/rabbitmq/.erlang.cookie
+              chmod 600 /var/lib/rabbitmq/.erlang.cookie
+          volumeMounts:
+            - name: config-volume
+              mountPath: /init/config/
+            - name: secrets-erlang-cookie-volume
+              mountPath: /init/secrets/
+            - name: config
+              mountPath: /etc/rabbitmq
+            - name: rabbitmq-pv
+              mountPath: /var/lib/rabbitmq
+      containers:
+      - name: rabbitmq-k8s
+        image: rabbitmq:latest
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 256Mi
+        volumeMounts:
+          - name: config
+            mountPath: /etc/rabbitmq
+          - name: rabbitmq-pv
+            mountPath: /var/lib/rabbitmq
+        ports:
+          - name: http
+            protocol: TCP
+            containerPort: 15672
+          - name: amqp
+            protocol: TCP
+            containerPort: 5672
+        livenessProbe:
+          exec:
+            command: ["rabbitmq-diagnostics", "status"]
+          initialDelaySeconds: 25
+          periodSeconds: 60
+          timeoutSeconds: 15
+        readinessProbe:
+          exec:
+            command: ["rabbitmq-diagnostics", "ping"]
+          initialDelaySeconds: 25
+          periodSeconds: 60
+          timeoutSeconds: 10
+        imagePullPolicy: Always
+        env:
+          - name: RABBITMQ_DEFAULT_PASS
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmq-admin
+                key: password
+          - name: RABBITMQ_DEFAULT_USER
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmq-admin
+                key: user
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: MY_POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: RABBITMQ_USE_LONGNAME
+            value: "true"
+          - name: K8S_SERVICE_NAME
+            value: rabbitmq
+          - name: RABBITMQ_NODENAME
+            value: rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local
+          - name: K8S_HOSTNAME_SUFFIX
+            value: .$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local
+      volumes:
+        - name: config-volume
+          configMap:
+            name: rabbitmq-config
+            items:
+            - key: rabbitmq.conf
+              path: rabbitmq.conf
+            - key: enabled_plugins
+              path: enabled_plugins
+        - name: secrets-erlang-cookie-volume
+          secret:
+            secretName: rabbitmq-erlang-cookie
+        - name: config
+          emptyDir: {}
+        - name: rabbitmq-pv
+          persistentVolumeClaim:
+            claimName: rabbitmq-pvc

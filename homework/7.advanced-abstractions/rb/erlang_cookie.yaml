@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rabbitmq-erlang-cookie
+type: Opaque
+data:
+  .erlang.cookie: MTIzNDU2Nzg=

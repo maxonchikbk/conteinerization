@@ -13,6 +13,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: prometheus
+            name: rabbitmq
             port:
-              number: 9090
+              number: 31673
