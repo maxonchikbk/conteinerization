@@ -49,7 +49,7 @@ services:
       - grafana_data:/var/lib/grafana
       - ./configs/grafana/grafana.ini:/etc/grafana/grafana.ini
     environment: 
-      GF_SECURITY_ADMIN_USER: "geek"
+      GF_SECURITY_ADMIN_USER: "admin"
       GF_SECURITY_ADMIN_PASSWORD: "12345678"
       GF_USERS_ALLOW_SIGN_UP: "false"
     restart: unless-stopped
@@ -89,9 +89,3 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     restart: unless-stopped
-      
-      
-
-
-    
-      
