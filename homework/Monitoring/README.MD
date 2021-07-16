@@ -11,4 +11,4 @@
 2) Run install.sh
 3) Go to http://mon.local/
 Credentials: admin/password
-![Screenshot](/index.png)
+![Screenshot](index.png)
