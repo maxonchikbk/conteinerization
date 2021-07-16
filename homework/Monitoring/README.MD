@@ -10,4 +10,5 @@
 ```
 2) Run install.sh
 3) Go to http://mon.local/
-![Screenshot](/index.png)
+
+![Screenshot](/homework/Monitoring/index.png)
