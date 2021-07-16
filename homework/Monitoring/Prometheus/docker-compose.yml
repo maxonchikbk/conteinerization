@@ -10,7 +10,7 @@ services:
     image: nginx:stable-alpine
     volumes:
       - ./configs/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./configs/nginx/index.html:/usr/share/nginx/html/index.html
+      - ./configs/nginx/html:/usr/share/nginx/html/
       - ./configs/nginx/conf.d:/etc/nginx/conf.d
       - ./configs/nginx/www:/var/www
       - ./configs/nginx/other:/etc/nginx/other
