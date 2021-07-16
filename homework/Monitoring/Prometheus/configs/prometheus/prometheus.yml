@@ -27,7 +27,7 @@ scrape_configs:               # список целей с конфигурац�
     scrape_timeout: 10s
     static_configs:
       - targets: 
-        - https://ya.ru
+        - https://ya.ru        
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target

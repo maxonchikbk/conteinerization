@@ -1,14 +1,14 @@
 groups:
 - name: default
   rules:
-  - alert: InstanceDown
-    expr: up == 0
-    for: 0m
+  - alert: InstanceUp
+    expr: up == 1
+    for: 5s
     labels:
       severity: critical
     annotations:
-      summary: "Instance {{ $labels.instance }} down"
-      description: "{{ $labels.instance }} of job {{ $labels.job}} has been down for 0 minute"
+      summary: "Instance {{ $labels.instance }} is up"
+      description: "{{ $labels.instance }} of job {{ $labels.job}} has been up for 5 seconds"
   - alert: FreeSpace
     expr: max(((node_filessystem_size_bytes - node_filessystem_free_bytes) / node_filessystem_size_bytes)*100)>90
     for: 1m
@@ -16,4 +16,4 @@ groups:
       severity: warning
     annotations:
       description: '{{$labels.device}} has less then 10% free disk space {{$labels.instance}}'
-      summary: 'Instance {{$labels.instance}}: low disk space'
+      summary: 'Instance {{$labels.instance}}: low disk space'   
