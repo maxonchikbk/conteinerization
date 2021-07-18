@@ -1,0 +1,15 @@
+---
+- hosts: all
+  remote_user: root
+  tasks:
+  - name: install epel repo
+    dnf: name=epel-release state=latest
+  - name: install zabbix-agent
+    dnf: name=zabbix22-agent state=latest
+  - name: copy zabbix configuration file
+    copy: src=./conf/zabbix_agentd.conf dest=/etc/zabbix_agentd.conf seuser=system_u
+    notify:
+      - Start Zabbix-agent
+  handlers:
+  - name: Start zabbix-agent
+    service: name=zabbix-agent state=started enabled=yes
