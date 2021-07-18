@@ -1,3 +1,14 @@
+## Полезные ссылки
+
+- [Лекция 1. Микросервисы и контейнеры](#лекция-1-микросервисы-и-контейнеры)
+- [Лекция 2. Docker](#лекция-2-docker)
+- [Лекция 3. Введение в Kubernetes](#лекция-3-введение-в-kubernetes)
+- [Лекция 4. Хранение данных и ресурсы](#лекция-4-хранение-данных-и-ресурсы)
+- [Лекция 5. Сетевые абстракции Kubernetes](#лекция-5-сетевые-абстракции-kubernetes)
+- [Лекция 6. Устройство кластера](#лекция-6-устройство-кластера)
+- [Лекция 7. Продвинутые абстракции](#лекция-7-продвинутые-абстракции)
+- [Лекция 8. Деплой тестового приложения в кластер, CI/CD](#лекция-8-деплой-тестового-приложения-в-кластер)
+
 ## Лекция 1. Микросервисы и контейнеры
 
 **Перед второй лекцией нужно установить Docker**
@@ -33,6 +44,8 @@
 ## Лекция 2. Docker
 
 **Docker**
+
+🔹 [Сеть контейнеров — это не сложно](https://habr.com/ru/company/timeweb/blog/558612/)
 
 🔹 [Overview of Docker CLI](https://docs.docker.com/engine/reference/run/)
 
@@ -109,3 +122,45 @@
 🔹 [Установка в помощью kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/)
 
 🔹 [Установка с помощью kubesparay](https://kubernetes.io/docs/setup/production-environment/tools/kubespray/)
+
+## Лекция 4. Хранение данных и ресурсы
+
+🔹 [Динамическое выделение дисков с PVC](https://mcs.mail.ru/help/ru_RU/k8s-pvc/k8s-pvc)
+
+🔹 [Рациональное использование ресурсов в Kubernetes](https://habr.com/ru/company/timeweb/blog/560670/)
+
+🔹 [Как оптимизировать ограничения ресурсов Kubernetes](https://habr.com/ru/company/timeweb/blog/562500/)
+
+## Лекция 5. Сетевые абстракции Kubernetes
+
+🔹 [Configure Liveness, Readiness and Startup Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)
+
+🔹 [iptables: How Kubernetes Services Direct Traffic to Pods](https://dustinspecker.com/posts/iptables-how-kubernetes-services-direct-traffic-to-pods/)
+
+🔹 [NetworkPolicy Editor](https://cilium.io/blog/2021/02/10/network-policy-editor?utm_source=telegram.me&utm_medium=social&utm_campaign=cilium-predstavil-vizualnyy-redaktor-se)
+
+🔹 [NGINX Ingress Controller Annotations](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/)
+
+## Лекция 6. Устройство кластера
+
+🔹 [Kubernetes is so Simple You Can Explore it with Curl](https://blog.tilt.dev/2021/03/18/kubernetes-is-so-simple.html)
+
+🔹 [Как увеличить скорость реакции Kubernetes на отказ узлов кластера?](https://habr.com/ru/company/timeweb/blog/561084/)
+
+## Лекция 7. Продвинутые абстракции
+
+🔹 [Митап "Stateful-приложения в 2020 году"](https://www.youtube.com/watch?v=ykIh4-616Ic&list=PL8D2P0ruohODzihD0D0FZXkVHXtXbb6w3&index=4&ab_channel=HighLoadChannel)
+
+🔹 [Jobs & Cronjobs in Kubernetes Cluster](https://medium.com/avmconsulting-blog/jobs-cronjobs-in-kubernetes-cluster-d0e872e3c8c8)
+
+🔹 [Tоп-10 PromQL запросов для мониторинга Kubernetes](https://habr.com/ru/company/timeweb/blog/562374/)
+
+## Лекция 8. Деплой тестового приложения в кластер
+
+🔹 [Антипаттерны деплоя в Kubernetes. Часть 1](https://habr.com/ru/company/timeweb/blog/557320/)
+
+🔹 [Антипаттерны деплоя в Kubernetes. Часть 2](https://habr.com/ru/company/timeweb/blog/560772/)
+
+🔹 [Антипаттерны деплоя в Kubernetes. Часть 3](https://habr.com/ru/company/timeweb/blog/561570/)
+
+🔹 [ПРОЕКТ «ФЕНИКС». КАК DEVOPS УСТРАНЯЕТ ХАОС И УСКОРЯЕТ РАЗВИТИЕ КОМПАНИИ](https://bombora.ru/book/64983/#.)
