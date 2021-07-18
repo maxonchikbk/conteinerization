@@ -1,3 +1,5 @@
+![Screenshot](index.png)
+
 ## Features:
 1) Prometheus, cAdvisor and Alertmanager
 2) Karma alert dashboard for Prometheus Alertmanager
@@ -29,6 +31,3 @@
 3) Zabbix: Admin/zabbix
 4) Sentry: max@mail.local/sentry
 5) RabbitMQ: Admin/rabbit
-
-
-![Screenshot](index.png)
