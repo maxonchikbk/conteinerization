@@ -1,0 +1,351 @@
+volumes:
+  prometheus_data:
+  grafana_data:
+  bot_data:
+
+services:  
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./configs/prometheus/targets:/etc/prometheus/targets
+      - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus      
+    command: 
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=70d"      
+      - "--web.enable-lifecycle"
+    restart: unless-stopped
+    ports:
+      - 9090:9090
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G 
+  
+  alertmanager:
+    image: prom/alertmanager:latest
+    volumes:
+      - ./configs/alertmanager/:/etc/alertmanager/
+    command: 
+      - "--config.file=/etc/alertmanager/config.yml"
+      - "--storage.path=/alertmanager"
+      - "--web.route-prefix=/alertmanager"
+    restart: unless-stopped
+    ports:
+      - 9093:9093
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G      
+  
+  grafana:
+    image: grafana/grafana:latest
+    user: "472"
+    volumes: 
+      - grafana_data:/var/lib/grafana
+      - ./configs/grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/rabbitmq.yaml
+      - ./configs/grafana/datasources.yml:/etc/grafana/provisioning/datasources/prometheus.yaml
+      - ./configs/grafana/dashboards:/dashboards
+    environment: 
+      GF_SECURITY_ADMIN_USER: "Admin"
+      GF_SECURITY_ADMIN_PASSWORD: "grafana"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_INSTALL_PLUGINS: "flant-statusmap-panel,grafana-piechart-panel"
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+  
+  nginx_exporter:
+    image: fish/nginx-exporter    
+    environment: 
+      nginx.scrape_uri: http://host.docker.internal/nginx_status
+    ports:
+      - 9113:9113
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+  
+  blackbox_exporter:
+    image: prom/blackbox-exporter:latest
+    volumes: 
+      - ./configs/blackbox_exporter/config.yml:/etc/blackbox_exporter/config.yml
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+
+  alertmanager-bot:
+    image: serg3091/prometheus_bot:latest
+    volumes:
+      - ./configs/alertmanager-bot/config.yaml:/config.yaml
+      - ./configs/alertmanager-bot/template.tmpl:/template.tmpl
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+
+  node_exporter:
+    image: prom/node-exporter:latest    
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'    
+    restart: unless-stopped
+    volumes: 
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    expose:
+      - 9100
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+
+  cadvisor:
+    image: google/cadvisor:latest
+    volumes:
+      - /:/rootfs:fo
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: unless-stopped
+    ports:
+      - 8282:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+
+  karma:
+    image: ghcr.io/prymitive/karma:latest
+    volumes:
+      - ./configs/karma/karma.yaml:/karma.yaml
+    # environment: 
+    #   ALERTMANAGER_URI: http://alertmanager:9093/alertmanager
+    ports:
+      - 8181:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+
+  rabbitmq: &rabbitmq
+    image: pivotalrabbitmq/rabbitmq-prometheus:latest
+    hostname: rmq0
+    ports:
+      - '4369:4369'
+      - '5672:5672'
+      - '25672:25672'
+      - '15672:15672'
+    environment:      
+      - RABBITMQ_USERNAME=Admin
+      - RABBITMQ_PASSWORD=rabbit
+      - RABBITMQ_ERLANG_COOKIE=rabbitmq-prometheus
+    cap_add:
+      - ALL    
+    volumes:      
+      - ./configs/rabbitmq/rabbitmq-overview.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./configs/rabbitmq/rabbitmq-overview-definitions.json:/etc/rabbitmq/rabbitmq-definitions.json:ro
+    ulimits:
+      nofile:
+        soft: 2000
+        hard: 2000
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G         
+  rmq1:
+    << : *rabbitmq
+    hostname: rmq1
+    ports:
+      - "5674:5672"
+      - "15674:15672"
+      - "15694:15692"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+
+  rmq2:
+    << : *rabbitmq
+    hostname: rmq2
+    ports:
+      - "5675:5672"
+      - "15675:15672"
+      - "15695:15692"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+
+  basic-get:
+    # https://hub.docker.com/r/pivotalrabbitmq/perf-test/tags
+    image: &perf-test-image pivotalrabbitmq/perf-test:2.11.0-ubuntu
+    environment:
+      URI: "amqp://guest:guest@rmq0:5672/%2f"
+      QUEUE: basic-get
+      ROUTING_KEY: basic-get
+      VARIABLE_RATE: "1:1,0:30"
+      POLLING: "true"
+      POLLING_INTERVAL: 5000
+      AUTOACK: "false"
+      SERVERS_STARTUP_TIMEOUT: &startup_timeout 60
+      METRICS_PROMETHEUS: "true"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G         
+
+  basic-get-auto:
+    image: *perf-test-image
+    environment:
+      URI: "amqp://guest:guest@rmq0:5672/%2f"
+      QUEUE: basic-get
+      ROUTING_KEY: basic-get
+      PRODUCERS: 0
+      POLLING: "true"
+      POLLING_INTERVAL: 5000
+      AUTOACK: "true"
+      SERVERS_STARTUP_TIMEOUT: *startup_timeout
+      METRICS_PROMETHEUS: "true"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+
+  greedy-consumer:
+    image: *perf-test-image
+    environment:
+      URI: "amqp://guest:guest@rmq0:5672/%2f"
+      QUEUE: greedy-consumer
+      ROUTING_KEY: greedy-consumer
+      VARIABLE_RATE: "100:20,0:20"
+      CONSUMER_RATE: 50
+      QOS: 2000
+      AUTOACK: "false"
+      SERVERS_STARTUP_TIMEOUT: *startup_timeout
+      METRICS_PROMETHEUS: "true"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G         
+  
+  publisher-confirms:
+    image: *perf-test-image
+    environment:
+      URI: "amqp://guest:guest@rmq1:5672/%2f"
+      QUEUE: publisher-confirms
+      ROUTING_KEY: publisher-confirms
+      AUTOACK: "true"
+      VARIABLE_RATE: "12:30,25:30,50:30,100:30"
+      CONFIRM: 1
+      CONFIRM_TIMEOUT: 1
+      SERVERS_STARTUP_TIMEOUT: *startup_timeout
+      METRICS_PROMETHEUS: "true"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+
+  slow-consumer-persistent:
+    image: *perf-test-image
+    environment:
+      URI: "amqp://guest:guest@rmq1:5672/%2f"
+      QUEUE: ha3-slow-consumer-persistent
+      ROUTING_KEY: slow-consumer-persistent
+      QUEUE_ARGS: x-max-length=10000
+      FLAG: persistent
+      AUTO_DELETE: "false"
+      SIZE: 51200
+      VARIABLE_RATE: "100:20,0:20"
+      CONSUMER_RATE: 50
+      QOS: 50
+      AUTOACK: "false"
+      SERVERS_STARTUP_TIMEOUT: *startup_timeout
+      METRICS_PROMETHEUS: "true"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+
+  nack:
+    image: *perf-test-image
+    entrypoint: []
+    command: 
+      - while true; do bin/runjava com.rabbitmq.perf.PerfTest;
+    environment:
+      # TIME: 60
+      URI: "amqp://guest:guest@rmq2:5672/%2f"
+      VARIABLE_RATE: "1:10,0:20"
+      QUEUE: nack
+      QUEUE_ARGS: x-max-length=100
+      ROUTING_KEY: nack
+      AUTOACK: "false"
+      NACK: "true"
+      QOS: 5
+      CONSUMER_LATENCY: 3000000
+      SERVERS_STARTUP_TIMEOUT: *startup_timeout
+      METRICS_PROMETHEUS: "true"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+
+  unroutable-return:
+    image: *perf-test-image
+    environment:
+      URI: "amqp://guest:guest@rmq2:5672/%2f"
+      VARIABLE_RATE: "2:30,4:30,10:30"
+      VARIABLE_SIZE: "100:30,200:30"
+      CONSUMERS: 0
+      FLAG: mandatory
+      SERVERS_STARTUP_TIMEOUT: *startup_timeout
+      METRICS_PROMETHEUS: "true"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
+
+  unroutable-drop:
+    image: *perf-test-image
+    environment:
+      URI: "amqp://guest:guest@rmq2:5672/%2f"
+      VARIABLE_RATE: "5:30,10:30,20:30"
+      VARIABLE_SIZE: "100:30,200:30"
+      CONSUMERS: 0
+      SERVERS_STARTUP_TIMEOUT: *startup_timeout
+      METRICS_PROMETHEUS: "true"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G   
