@@ -10,7 +10,7 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: prometheus
     image: prom/prometheus:latest
     volumes:
       - ./configs/prometheus/targets:/etc/prometheus/targets
@@ -36,7 +36,7 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: alertmanager
     image: prom/alertmanager:latest
     volumes:
       - ./configs/alertmanager/:/etc/alertmanager/
@@ -59,7 +59,7 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: grafana
     image: grafana/grafana:latest
     user: "472"
     volumes: 
@@ -87,7 +87,7 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: nginx_exporter
     image: fish/nginx-exporter    
     environment: 
       nginx.scrape_uri: http://host.docker.internal/nginx_status
@@ -105,7 +105,7 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: blackbox_exporter
     image: prom/blackbox-exporter:latest
     volumes: 
       - ./configs/blackbox_exporter/config.yml:/etc/blackbox_exporter/config.yml
@@ -122,7 +122,7 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: alertmanager
     image: serg3091/prometheus_bot:latest
     volumes:
       - ./configs/alertmanager-bot/config.yaml:/config.yaml
@@ -140,7 +140,7 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: node_exporter
     image: prom/node-exporter:latest    
     command:
       - '--path.procfs=/host/proc'
@@ -166,7 +166,7 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: cadvisor
     image: google/cadvisor:latest
     volumes:
       - /:/rootfs:fo
@@ -188,7 +188,7 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: karma
     image: ghcr.io/prymitive/karma:latest
     volumes:
       - ./configs/karma/karma.yaml:/karma.yaml
@@ -208,7 +208,7 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: rabbitmq
     image: pivotalrabbitmq/rabbitmq-prometheus:latest
     hostname: rmq0
     ports:

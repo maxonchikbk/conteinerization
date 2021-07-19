@@ -17,7 +17,7 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: nginx
     deploy:
       resources:
         limits:
