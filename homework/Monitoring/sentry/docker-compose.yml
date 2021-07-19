@@ -62,12 +62,34 @@ x-snuba-defaults: &snuba_defaults
 services:
   smtp:
     <<: *restart_policy
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: tianon/exim4
     volumes:
       - "sentry-smtp:/var/spool/exim4"
       - "sentry-smtp-log:/var/log/exim4"
   memcached:
     <<: *restart_policy
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: "memcached:1.6.9-alpine"
     healthcheck:
       <<: *healthcheck_defaults
@@ -75,6 +97,17 @@ services:
       test: echo stats | nc 127.0.0.1 11211
   redis:
     <<: *restart_policy
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: "redis:6.2.4-alpine"
     healthcheck:
       <<: *healthcheck_defaults
@@ -87,6 +120,17 @@ services:
         hard: 10032
   postgres:
     <<: *restart_policy
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: "postgres:9.6"
     healthcheck:
       <<: *healthcheck_defaults
@@ -113,6 +157,17 @@ services:
         target: /opt/sentry/
   zookeeper:
     <<: *restart_policy
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: "confluentinc/cp-zookeeper:5.5.0"
     environment:
       ZOOKEEPER_CLIENT_PORT: "2181"
@@ -132,6 +187,17 @@ services:
     <<: *restart_policy
     depends_on:
       - zookeeper
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: "confluentinc/cp-kafka:5.5.0"
     environment:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
@@ -154,6 +220,17 @@ services:
       test: ["CMD-SHELL", "nc -z localhost 9092"]
   clickhouse:
     <<: *restart_policy
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 4G     
     image: "yandex/clickhouse-server:20.3.9.70"
     ulimits:
       nofile:
@@ -172,6 +249,17 @@ services:
       # You might want to change this to a higher value (and ensure your host has enough memory)
       MAX_MEMORY_USAGE_RATIO: 0.3
   geoipupdate:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: "maxmindinc/geoipupdate:v4.7.1"
     # Override the entrypoint in order to avoid using envvars for config.
     # Futz with settings so we can keep mmdb and conf in same dir on host
@@ -211,6 +299,17 @@ services:
     command: subscriptions --auto-offset-reset=latest --consumer-group=snuba-transactions-subscriptions-consumers --topic=events --result-topic=transactions-subscription-results --dataset=transactions --commit-log-topic=snuba-commit-log --commit-log-group=transactions_group --delay-seconds=60 --schedule-ttl=60
   snuba-cleanup:
     <<: *snuba_defaults
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: snuba-cleanup-onpremise-local
     build:
       context: ./cron
@@ -219,6 +318,17 @@ services:
     command: '"*/5 * * * * gosu snuba snuba cleanup --storage errors --dry-run False"'
   snuba-transactions-cleanup:
     <<: *snuba_defaults
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: snuba-cleanup-onpremise-local
     build:
       context: ./cron
@@ -227,6 +337,17 @@ services:
     command: '"*/5 * * * * gosu snuba snuba cleanup --storage transactions --dry-run False"'
   symbolicator:
     <<: *restart_policy
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: "$SYMBOLICATOR_IMAGE"
     volumes:
       - "sentry-symbolicator:/data"
@@ -237,6 +358,17 @@ services:
     command: run -c /etc/symbolicator/config.yml
   symbolicator-cleanup:
     <<: *restart_policy
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: symbolicator-cleanup-onpremise-local
     build:
       context: ./cron
@@ -268,6 +400,17 @@ services:
     command: run query-subscription-consumer --commit-batch-size 1 --topic transactions-subscription-results
   sentry-cleanup:
     <<: *sentry_defaults
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: sentry-cleanup-onpremise-local
     build:
       context: ./cron
@@ -279,6 +422,17 @@ services:
     <<: *restart_policy
     ports:
       - "$SENTRY_BIND:80/tcp"
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: "nginx:1.21.0-alpine"
     volumes:
       - type: bind
@@ -290,6 +444,17 @@ services:
       - relay
   relay:
     <<: *restart_policy
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1G     
     image: "$RELAY_IMAGE"
     volumes:
       - type: bind

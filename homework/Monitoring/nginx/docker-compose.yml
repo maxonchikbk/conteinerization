@@ -12,6 +12,12 @@ services:
     restart: unless-stopped
     ports:
       - 80:80
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
     deploy:
       resources:
         limits:

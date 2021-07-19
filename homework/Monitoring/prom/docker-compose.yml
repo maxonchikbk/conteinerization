@@ -5,6 +5,12 @@ volumes:
 
 services:  
   prometheus:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
     image: prom/prometheus:latest
     volumes:
       - ./configs/prometheus/targets:/etc/prometheus/targets
@@ -25,6 +31,12 @@ services:
           memory: 1G 
   
   alertmanager:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
     image: prom/alertmanager:latest
     volumes:
       - ./configs/alertmanager/:/etc/alertmanager/
@@ -42,6 +54,12 @@ services:
           memory: 1G      
   
   grafana:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
     image: grafana/grafana:latest
     user: "472"
     volumes: 
@@ -64,6 +82,12 @@ services:
           memory: 1G   
   
   nginx_exporter:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
     image: fish/nginx-exporter    
     environment: 
       nginx.scrape_uri: http://host.docker.internal/nginx_status
@@ -76,6 +100,12 @@ services:
           memory: 1G   
   
   blackbox_exporter:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
     image: prom/blackbox-exporter:latest
     volumes: 
       - ./configs/blackbox_exporter/config.yml:/etc/blackbox_exporter/config.yml
@@ -87,6 +117,12 @@ services:
           memory: 1G   
 
   alertmanager-bot:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
     image: serg3091/prometheus_bot:latest
     volumes:
       - ./configs/alertmanager-bot/config.yaml:/config.yaml
@@ -99,6 +135,12 @@ services:
           memory: 1G   
 
   node_exporter:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
     image: prom/node-exporter:latest    
     command:
       - '--path.procfs=/host/proc'
@@ -119,6 +161,12 @@ services:
           memory: 1G   
 
   cadvisor:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
     image: google/cadvisor:latest
     volumes:
       - /:/rootfs:fo
@@ -135,6 +183,12 @@ services:
           memory: 1G   
 
   karma:
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
     image: ghcr.io/prymitive/karma:latest
     volumes:
       - ./configs/karma/karma.yaml:/karma.yaml
@@ -149,6 +203,12 @@ services:
           memory: 1G   
 
   rabbitmq: &rabbitmq
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-async-connect: "true"
+        fluentd-address: localhost:24224
+        tag: fluentd
     image: pivotalrabbitmq/rabbitmq-prometheus:latest
     hostname: rmq0
     ports:
@@ -200,152 +260,200 @@ services:
           cpus: '0.70'
           memory: 1G   
 
-  basic-get:
-    # https://hub.docker.com/r/pivotalrabbitmq/perf-test/tags
-    image: &perf-test-image pivotalrabbitmq/perf-test:2.11.0-ubuntu
-    environment:
-      URI: "amqp://guest:guest@rmq0:5672/%2f"
-      QUEUE: basic-get
-      ROUTING_KEY: basic-get
-      VARIABLE_RATE: "1:1,0:30"
-      POLLING: "true"
-      POLLING_INTERVAL: 5000
-      AUTOACK: "false"
-      SERVERS_STARTUP_TIMEOUT: &startup_timeout 60
-      METRICS_PROMETHEUS: "true"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.70'
-          memory: 1G         
+  # basic-get:
+  #   # https://hub.docker.com/r/pivotalrabbitmq/perf-test/tags
+  #   logging:
+  #     driver: "fluentd"
+  #     options:
+  #       fluentd-async-connect: "true"
+  #       fluentd-address: localhost:24224
+  #       tag: fluentd
+  #   image: &perf-test-image pivotalrabbitmq/perf-test:2.11.0-ubuntu
+  #   environment:
+  #     URI: "amqp://guest:guest@rmq0:5672/%2f"
+  #     QUEUE: basic-get
+  #     ROUTING_KEY: basic-get
+  #     VARIABLE_RATE: "1:1,0:30"
+  #     POLLING: "true"
+  #     POLLING_INTERVAL: 5000
+  #     AUTOACK: "false"
+  #     SERVERS_STARTUP_TIMEOUT: &startup_timeout 60
+  #     METRICS_PROMETHEUS: "true"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.70'
+  #         memory: 1G         
 
-  basic-get-auto:
-    image: *perf-test-image
-    environment:
-      URI: "amqp://guest:guest@rmq0:5672/%2f"
-      QUEUE: basic-get
-      ROUTING_KEY: basic-get
-      PRODUCERS: 0
-      POLLING: "true"
-      POLLING_INTERVAL: 5000
-      AUTOACK: "true"
-      SERVERS_STARTUP_TIMEOUT: *startup_timeout
-      METRICS_PROMETHEUS: "true"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.70'
-          memory: 1G   
+  # basic-get-auto:
+  #   logging:
+  #     driver: "fluentd"
+  #     options:
+  #       fluentd-async-connect: "true"
+  #       fluentd-address: localhost:24224
+  #       tag: fluentd
+  #   image: *perf-test-image
+  #   environment:
+  #     URI: "amqp://guest:guest@rmq0:5672/%2f"
+  #     QUEUE: basic-get
+  #     ROUTING_KEY: basic-get
+  #     PRODUCERS: 0
+  #     POLLING: "true"
+  #     POLLING_INTERVAL: 5000
+  #     AUTOACK: "true"
+  #     SERVERS_STARTUP_TIMEOUT: *startup_timeout
+  #     METRICS_PROMETHEUS: "true"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.70'
+  #         memory: 1G   
 
-  greedy-consumer:
-    image: *perf-test-image
-    environment:
-      URI: "amqp://guest:guest@rmq0:5672/%2f"
-      QUEUE: greedy-consumer
-      ROUTING_KEY: greedy-consumer
-      VARIABLE_RATE: "100:20,0:20"
-      CONSUMER_RATE: 50
-      QOS: 2000
-      AUTOACK: "false"
-      SERVERS_STARTUP_TIMEOUT: *startup_timeout
-      METRICS_PROMETHEUS: "true"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.70'
-          memory: 1G         
+  # greedy-consumer:
+  #   logging:
+  #     driver: "fluentd"
+  #     options:
+  #       fluentd-async-connect: "true"
+  #       fluentd-address: localhost:24224
+  #       tag: fluentd
+  #   image: *perf-test-image
+  #   environment:
+  #     URI: "amqp://guest:guest@rmq0:5672/%2f"
+  #     QUEUE: greedy-consumer
+  #     ROUTING_KEY: greedy-consumer
+  #     VARIABLE_RATE: "100:20,0:20"
+  #     CONSUMER_RATE: 50
+  #     QOS: 2000
+  #     AUTOACK: "false"
+  #     SERVERS_STARTUP_TIMEOUT: *startup_timeout
+  #     METRICS_PROMETHEUS: "true"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.70'
+  #         memory: 1G         
   
-  publisher-confirms:
-    image: *perf-test-image
-    environment:
-      URI: "amqp://guest:guest@rmq1:5672/%2f"
-      QUEUE: publisher-confirms
-      ROUTING_KEY: publisher-confirms
-      AUTOACK: "true"
-      VARIABLE_RATE: "12:30,25:30,50:30,100:30"
-      CONFIRM: 1
-      CONFIRM_TIMEOUT: 1
-      SERVERS_STARTUP_TIMEOUT: *startup_timeout
-      METRICS_PROMETHEUS: "true"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.70'
-          memory: 1G   
+  # publisher-confirms:
+  #   logging:
+  #     driver: "fluentd"
+  #     options:
+  #       fluentd-async-connect: "true"
+  #       fluentd-address: localhost:24224
+  #       tag: fluentd
+  #   image: *perf-test-image
+  #   environment:
+  #     URI: "amqp://guest:guest@rmq1:5672/%2f"
+  #     QUEUE: publisher-confirms
+  #     ROUTING_KEY: publisher-confirms
+  #     AUTOACK: "true"
+  #     VARIABLE_RATE: "12:30,25:30,50:30,100:30"
+  #     CONFIRM: 1
+  #     CONFIRM_TIMEOUT: 1
+  #     SERVERS_STARTUP_TIMEOUT: *startup_timeout
+  #     METRICS_PROMETHEUS: "true"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.70'
+  #         memory: 1G   
 
-  slow-consumer-persistent:
-    image: *perf-test-image
-    environment:
-      URI: "amqp://guest:guest@rmq1:5672/%2f"
-      QUEUE: ha3-slow-consumer-persistent
-      ROUTING_KEY: slow-consumer-persistent
-      QUEUE_ARGS: x-max-length=10000
-      FLAG: persistent
-      AUTO_DELETE: "false"
-      SIZE: 51200
-      VARIABLE_RATE: "100:20,0:20"
-      CONSUMER_RATE: 50
-      QOS: 50
-      AUTOACK: "false"
-      SERVERS_STARTUP_TIMEOUT: *startup_timeout
-      METRICS_PROMETHEUS: "true"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.70'
-          memory: 1G   
+  # slow-consumer-persistent:
+  #   logging:
+  #     driver: "fluentd"
+  #     options:
+  #       fluentd-async-connect: "true"
+  #       fluentd-address: localhost:24224
+  #       tag: fluentd
+  #   image: *perf-test-image
+  #   environment:
+  #     URI: "amqp://guest:guest@rmq1:5672/%2f"
+  #     QUEUE: ha3-slow-consumer-persistent
+  #     ROUTING_KEY: slow-consumer-persistent
+  #     QUEUE_ARGS: x-max-length=10000
+  #     FLAG: persistent
+  #     AUTO_DELETE: "false"
+  #     SIZE: 51200
+  #     VARIABLE_RATE: "100:20,0:20"
+  #     CONSUMER_RATE: 50
+  #     QOS: 50
+  #     AUTOACK: "false"
+  #     SERVERS_STARTUP_TIMEOUT: *startup_timeout
+  #     METRICS_PROMETHEUS: "true"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.70'
+  #         memory: 1G   
 
-  nack:
-    image: *perf-test-image
-    entrypoint: []
-    command: 
-      - while true; do bin/runjava com.rabbitmq.perf.PerfTest;
-    environment:
-      # TIME: 60
-      URI: "amqp://guest:guest@rmq2:5672/%2f"
-      VARIABLE_RATE: "1:10,0:20"
-      QUEUE: nack
-      QUEUE_ARGS: x-max-length=100
-      ROUTING_KEY: nack
-      AUTOACK: "false"
-      NACK: "true"
-      QOS: 5
-      CONSUMER_LATENCY: 3000000
-      SERVERS_STARTUP_TIMEOUT: *startup_timeout
-      METRICS_PROMETHEUS: "true"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.70'
-          memory: 1G   
+  # nack:
+  #   logging:
+  #     driver: "fluentd"
+  #     options:
+  #       fluentd-async-connect: "true"
+  #       fluentd-address: localhost:24224
+  #       tag: fluentd
+  #   image: *perf-test-image
+  #   entrypoint: []
+  #   command: 
+  #     - while true; do bin/runjava com.rabbitmq.perf.PerfTest;
+  #   environment:
+  #     # TIME: 60
+  #     URI: "amqp://guest:guest@rmq2:5672/%2f"
+  #     VARIABLE_RATE: "1:10,0:20"
+  #     QUEUE: nack
+  #     QUEUE_ARGS: x-max-length=100
+  #     ROUTING_KEY: nack
+  #     AUTOACK: "false"
+  #     NACK: "true"
+  #     QOS: 5
+  #     CONSUMER_LATENCY: 3000000
+  #     SERVERS_STARTUP_TIMEOUT: *startup_timeout
+  #     METRICS_PROMETHEUS: "true"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.70'
+  #         memory: 1G   
 
-  unroutable-return:
-    image: *perf-test-image
-    environment:
-      URI: "amqp://guest:guest@rmq2:5672/%2f"
-      VARIABLE_RATE: "2:30,4:30,10:30"
-      VARIABLE_SIZE: "100:30,200:30"
-      CONSUMERS: 0
-      FLAG: mandatory
-      SERVERS_STARTUP_TIMEOUT: *startup_timeout
-      METRICS_PROMETHEUS: "true"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.70'
-          memory: 1G   
+  # unroutable-return:
+  #   logging:
+  #     driver: "fluentd"
+  #     options:
+  #       fluentd-async-connect: "true"
+  #       fluentd-address: localhost:24224
+  #       tag: fluentd
+  #   image: *perf-test-image
+  #   environment:
+  #     URI: "amqp://guest:guest@rmq2:5672/%2f"
+  #     VARIABLE_RATE: "2:30,4:30,10:30"
+  #     VARIABLE_SIZE: "100:30,200:30"
+  #     CONSUMERS: 0
+  #     FLAG: mandatory
+  #     SERVERS_STARTUP_TIMEOUT: *startup_timeout
+  #     METRICS_PROMETHEUS: "true"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.70'
+  #         memory: 1G   
 
-  unroutable-drop:
-    image: *perf-test-image
-    environment:
-      URI: "amqp://guest:guest@rmq2:5672/%2f"
-      VARIABLE_RATE: "5:30,10:30,20:30"
-      VARIABLE_SIZE: "100:30,200:30"
-      CONSUMERS: 0
-      SERVERS_STARTUP_TIMEOUT: *startup_timeout
-      METRICS_PROMETHEUS: "true"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.70'
-          memory: 1G   
+  # unroutable-drop:
+  #   logging:
+  #     driver: "fluentd"
+  #     options:
+  #       fluentd-async-connect: "true"
+  #       fluentd-address: localhost:24224
+  #       tag: fluentd
+  #   image: *perf-test-image
+  #   environment:
+  #     URI: "amqp://guest:guest@rmq2:5672/%2f"
+  #     VARIABLE_RATE: "5:30,10:30,20:30"
+  #     VARIABLE_SIZE: "100:30,200:30"
+  #     CONSUMERS: 0
+  #     SERVERS_STARTUP_TIMEOUT: *startup_timeout
+  #     METRICS_PROMETHEUS: "true"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.70'
+  #         memory: 1G   
