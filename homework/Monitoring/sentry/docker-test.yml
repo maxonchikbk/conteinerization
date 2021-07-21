@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  pyapp:
+    build:
+      context: ./!test_app/      
+    ports:
+      - 4567:4567
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 1G

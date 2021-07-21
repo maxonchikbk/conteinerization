@@ -12,14 +12,14 @@ services:
     restart: unless-stopped
     ports:
       - 80:80
-    logging:
-      driver: "fluentd"
-      options:
-        fluentd-async-connect: "true"
-        fluentd-address: localhost:24224
-        tag: nginx
+    # logging:
+    #   driver: "fluentd"
+    #   options:
+    #     fluentd-async-connect: "true"
+    #     fluentd-address: localhost:24224
+    #     tag: nginx
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G         

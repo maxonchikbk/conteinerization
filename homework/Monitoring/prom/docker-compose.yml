@@ -27,7 +27,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G 
   
   alertmanager:
@@ -50,7 +50,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G      
   
   grafana:
@@ -78,7 +78,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G   
   
   nginx_exporter:
@@ -96,7 +96,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G   
   
   blackbox_exporter:
@@ -113,7 +113,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G   
 
   alertmanager-bot:
@@ -131,7 +131,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G   
 
   node_exporter:
@@ -157,7 +157,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G   
 
   cadvisor:
@@ -179,7 +179,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G   
 
   karma:
@@ -199,7 +199,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G   
 
   rabbitmq: &rabbitmq
@@ -232,7 +232,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G         
   rmq1:
     << : *rabbitmq
@@ -244,7 +244,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G   
 
   rmq2:
@@ -257,7 +257,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G   
 
   # basic-get:
@@ -267,7 +267,7 @@ services:
   #     options:
   #       fluentd-async-connect: "true"
   #       fluentd-address: localhost:24224
-  #       tag: fluentd
+  #       tag: basic-get
   #   image: &perf-test-image pivotalrabbitmq/perf-test:2.11.0-ubuntu
   #   environment:
   #     URI: "amqp://guest:guest@rmq0:5672/%2f"
@@ -282,7 +282,7 @@ services:
   #   deploy:
   #     resources:
   #       limits:
-  #         cpus: '0.70'
+  #         cpus: '0.25'
   #         memory: 1G         
 
   # basic-get-auto:
@@ -291,7 +291,7 @@ services:
   #     options:
   #       fluentd-async-connect: "true"
   #       fluentd-address: localhost:24224
-  #       tag: fluentd
+  #       tag: basic-get-auto
   #   image: *perf-test-image
   #   environment:
   #     URI: "amqp://guest:guest@rmq0:5672/%2f"
@@ -306,7 +306,7 @@ services:
   #   deploy:
   #     resources:
   #       limits:
-  #         cpus: '0.70'
+  #         cpus: '0.25'
   #         memory: 1G   
 
   # greedy-consumer:
@@ -315,7 +315,7 @@ services:
   #     options:
   #       fluentd-async-connect: "true"
   #       fluentd-address: localhost:24224
-  #       tag: fluentd
+  #       tag: greedy-consumer
   #   image: *perf-test-image
   #   environment:
   #     URI: "amqp://guest:guest@rmq0:5672/%2f"
@@ -330,7 +330,7 @@ services:
   #   deploy:
   #     resources:
   #       limits:
-  #         cpus: '0.70'
+  #         cpus: '0.25'
   #         memory: 1G         
   
   # publisher-confirms:
@@ -339,7 +339,7 @@ services:
   #     options:
   #       fluentd-async-connect: "true"
   #       fluentd-address: localhost:24224
-  #       tag: fluentd
+  #       tag: publisher-confirms
   #   image: *perf-test-image
   #   environment:
   #     URI: "amqp://guest:guest@rmq1:5672/%2f"
@@ -354,7 +354,7 @@ services:
   #   deploy:
   #     resources:
   #       limits:
-  #         cpus: '0.70'
+  #         cpus: '0.25'
   #         memory: 1G   
 
   # slow-consumer-persistent:
@@ -363,7 +363,7 @@ services:
   #     options:
   #       fluentd-async-connect: "true"
   #       fluentd-address: localhost:24224
-  #       tag: fluentd
+  #       tag: slow-consumer-persistent
   #   image: *perf-test-image
   #   environment:
   #     URI: "amqp://guest:guest@rmq1:5672/%2f"
@@ -382,7 +382,7 @@ services:
   #   deploy:
   #     resources:
   #       limits:
-  #         cpus: '0.70'
+  #         cpus: '0.25'
   #         memory: 1G   
 
   # nack:
@@ -391,7 +391,7 @@ services:
   #     options:
   #       fluentd-async-connect: "true"
   #       fluentd-address: localhost:24224
-  #       tag: fluentd
+  #       tag: nack
   #   image: *perf-test-image
   #   entrypoint: []
   #   command: 
@@ -412,7 +412,7 @@ services:
   #   deploy:
   #     resources:
   #       limits:
-  #         cpus: '0.70'
+  #         cpus: '0.25'
   #         memory: 1G   
 
   # unroutable-return:
@@ -421,7 +421,7 @@ services:
   #     options:
   #       fluentd-async-connect: "true"
   #       fluentd-address: localhost:24224
-  #       tag: fluentd
+  #       tag: unroutable-return
   #   image: *perf-test-image
   #   environment:
   #     URI: "amqp://guest:guest@rmq2:5672/%2f"
@@ -434,7 +434,7 @@ services:
   #   deploy:
   #     resources:
   #       limits:
-  #         cpus: '0.70'
+  #         cpus: '0.25'
   #         memory: 1G   
 
   # unroutable-drop:
@@ -443,7 +443,7 @@ services:
   #     options:
   #       fluentd-async-connect: "true"
   #       fluentd-address: localhost:24224
-  #       tag: fluentd
+  #       tag: unroutable-drop
   #   image: *perf-test-image
   #   environment:
   #     URI: "amqp://guest:guest@rmq2:5672/%2f"
@@ -455,5 +455,5 @@ services:
   #   deploy:
   #     resources:
   #       limits:
-  #         cpus: '0.70'
+  #         cpus: '0.25'
   #         memory: 1G   

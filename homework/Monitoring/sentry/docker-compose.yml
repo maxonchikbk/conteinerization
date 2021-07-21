@@ -71,7 +71,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: tianon/exim4
     volumes:
@@ -88,7 +88,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: "memcached:1.6.9-alpine"
     healthcheck:
@@ -102,11 +102,11 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: redis
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: "redis:6.2.4-alpine"
     healthcheck:
@@ -125,11 +125,11 @@ services:
       options:
         fluentd-async-connect: "true"
         fluentd-address: localhost:24224
-        tag: fluentd
+        tag: postgres
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: "postgres:9.6"
     healthcheck:
@@ -166,7 +166,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: "confluentinc/cp-zookeeper:5.5.0"
     environment:
@@ -196,7 +196,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: "confluentinc/cp-kafka:5.5.0"
     environment:
@@ -229,7 +229,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 4G     
     image: "yandex/clickhouse-server:20.3.9.70"
     ulimits:
@@ -258,7 +258,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: "maxmindinc/geoipupdate:v4.7.1"
     # Override the entrypoint in order to avoid using envvars for config.
@@ -308,7 +308,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: snuba-cleanup-onpremise-local
     build:
@@ -327,7 +327,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: snuba-cleanup-onpremise-local
     build:
@@ -346,7 +346,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: "$SYMBOLICATOR_IMAGE"
     volumes:
@@ -367,7 +367,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: symbolicator-cleanup-onpremise-local
     build:
@@ -409,7 +409,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: sentry-cleanup-onpremise-local
     build:
@@ -431,7 +431,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: "nginx:1.21.0-alpine"
     volumes:
@@ -453,7 +453,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.70'
+          cpus: '0.25'
           memory: 1G     
     image: "$RELAY_IMAGE"
     volumes:

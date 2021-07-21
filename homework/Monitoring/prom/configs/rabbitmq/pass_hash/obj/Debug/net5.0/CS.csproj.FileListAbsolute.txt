@@ -1,0 +1,16 @@
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\bin\Debug\net5.0\CS.exe
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\bin\Debug\net5.0\CS.deps.json
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\bin\Debug\net5.0\CS.runtimeconfig.json
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\bin\Debug\net5.0\CS.runtimeconfig.dev.json
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\bin\Debug\net5.0\CS.dll
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\bin\Debug\net5.0\ref\CS.dll
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\bin\Debug\net5.0\CS.pdb
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\obj\Debug\net5.0\CS.csproj.AssemblyReference.cache
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\obj\Debug\net5.0\CS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\obj\Debug\net5.0\CS.AssemblyInfoInputs.cache
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\obj\Debug\net5.0\CS.AssemblyInfo.cs
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\obj\Debug\net5.0\CS.csproj.CoreCompileInputs.cache
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\obj\Debug\net5.0\CS.dll
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\obj\Debug\net5.0\ref\CS.dll
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\obj\Debug\net5.0\CS.pdb
+C:\Users\maxon\geekbrains\github\homework\Monitoring\prom\configs\rabbitmq\pass_hash\obj\Debug\net5.0\CS.genruntimeconfig.cache

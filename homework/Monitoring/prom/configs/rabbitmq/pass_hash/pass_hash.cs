@@ -43,7 +43,8 @@ namespace Rextester
         public static void Main(string[] args)
         {
             //Your code goes here
-            Console.WriteLine(Rextester.RabbitMqPasswordHelper.EncodePassword("rabbit"));
+            Console.WriteLine(Rextester.RabbitMqPasswordHelper.EncodePassword("rabbit"));        
+            int a=1/0;  
         }
     }
 }
