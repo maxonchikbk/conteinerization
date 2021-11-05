@@ -22,7 +22,7 @@
 1) Add to hosts:
 ```
 127.0.0.1 mon.local
-127.0.0.1 prom.local
+127.0.0.1 prometheus.local
 127.0.0.1 grafana.local
 127.0.0.1 zabbix.local
 127.0.0.1 alertmanager.local
